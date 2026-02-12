@@ -259,6 +259,7 @@ let
 
 in import "${pkgs.path}/nixos/lib/make-ext4-fs.nix" {
   inherit pkgs lib;
+  inherit (pkgs) e2fsprogs zstd libfaketime perl fakeroot;
 
   # All packages whose closures should be included in the image.
   storePaths = [
