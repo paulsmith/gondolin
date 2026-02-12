@@ -35,7 +35,7 @@ let
       # Everything we need is compiled straight into the kernel image.
       # This shaves tens of milliseconds off boot (no modprobe, no depmod).
       # =====================================================================
-      MODULES = no;
+      MODULES = lib.mkForce no;
 
       # =====================================================================
       # Virtio transport — the only "hardware" our QEMU microvm exposes.
@@ -47,7 +47,7 @@ let
       VIRTIO_NET       = yes;
       VIRTIO_CONSOLE   = yes;
       VIRTIO_RNG       = yes;
-      VIRTIO_BALLOON   = no;   # not needed for sandbox VMs
+      VIRTIO_BALLOON   = lib.mkForce no;
 
       # =====================================================================
       # Filesystems
@@ -101,58 +101,61 @@ let
       CGROUPS          = yes;   # useful for resource limits
 
       # =====================================================================
-      # Disable everything we don't need
+      # Disable everything we don't need.
+      #
+      # Options that conflict with nixpkgs common-config.nix defaults use
+      # lib.mkForce to override the base "yes"/"module" value.
       # =====================================================================
-      SOUND            = no;
-      USB_SUPPORT      = no;
-      WIRELESS         = no;
-      WLAN             = no;
-      BLUETOOTH        = no;
-      NFC              = no;
-      DRM              = no;
-      FB               = no;
-      VGA_CONSOLE      = no;
-      FRAMEBUFFER_CONSOLE = no;
-      INPUT_EVDEV      = no;
-      HID              = no;
-      I2C              = no;
-      SPI              = no;
-      HWMON            = no;
-      THERMAL          = no;
-      WATCHDOG         = no;
-      MEDIA_SUPPORT    = no;
-      RC_CORE          = no;
-      CAN              = no;
-      INFINIBAND       = no;
-      ACCESSIBILITY    = no;
-      PCMCIA           = no;
-      ACPI_FAN         = no;
-      CPU_FREQ         = no;
+      SOUND               = lib.mkForce no;
+      USB_SUPPORT         = lib.mkForce no;
+      WIRELESS            = lib.mkForce no;
+      WLAN                = lib.mkForce no;
+      BLUETOOTH           = lib.mkForce no;
+      NFC                 = lib.mkForce no;
+      DRM                 = lib.mkForce no;
+      FB                  = lib.mkForce no;
+      VGA_CONSOLE         = lib.mkForce no;
+      FRAMEBUFFER_CONSOLE = lib.mkForce no;
+      INPUT_EVDEV         = lib.mkForce no;
+      HID                 = lib.mkForce no;
+      I2C                 = lib.mkForce no;
+      SPI                 = lib.mkForce no;
+      HWMON               = lib.mkForce no;
+      THERMAL             = lib.mkForce no;
+      WATCHDOG            = lib.mkForce no;
+      MEDIA_SUPPORT       = lib.mkForce no;
+      RC_CORE             = lib.mkForce no;
+      CAN                 = lib.mkForce no;
+      INFINIBAND          = lib.mkForce no;
+      ACCESSIBILITY       = lib.mkForce no;
+      PCMCIA              = lib.mkForce no;
+      ACPI_FAN            = lib.mkForce no;
+      CPU_FREQ            = lib.mkForce no;
       # Storage controllers we'll never use
-      ATA              = no;
-      SCSI             = no;
-      MD               = no;
-      BLK_DEV_DM       = no;
+      ATA                 = lib.mkForce no;
+      SCSI                = lib.mkForce no;
+      MD                  = lib.mkForce no;
+      BLK_DEV_DM          = lib.mkForce no;
       # Network protocols we don't need
-      BRIDGE           = no;
-      VLAN_8021Q       = no;
-      NETFILTER        = no;
-      IP_DCCP          = no;
-      IP_SCTP          = no;
-      RDS              = no;
-      TIPC             = no;
-      ATM              = no;
-      L2TP             = no;
-      DECNET           = no;
-      LLC2             = no;
-      LAPB             = no;
-      PHONET           = no;
-      IEEE802154       = no;
-      CAIF             = no;
-      AF_RXRPC         = no;
-      AF_KCM           = no;
-      NET_TEAM         = no;
-      OPENVSWITCH      = no;
+      BRIDGE              = lib.mkForce no;
+      VLAN_8021Q          = lib.mkForce no;
+      NETFILTER           = lib.mkForce no;
+      IP_DCCP             = lib.mkForce no;
+      IP_SCTP             = lib.mkForce no;
+      RDS                 = lib.mkForce no;
+      TIPC                = lib.mkForce no;
+      ATM                 = lib.mkForce no;
+      L2TP                = lib.mkForce no;
+      DECNET              = lib.mkForce no;
+      LLC2                = lib.mkForce no;
+      LAPB                = lib.mkForce no;
+      PHONET              = lib.mkForce no;
+      IEEE802154          = lib.mkForce no;
+      CAIF                = lib.mkForce no;
+      AF_RXRPC            = lib.mkForce no;
+      AF_KCM              = lib.mkForce no;
+      NET_TEAM            = lib.mkForce no;
+      OPENVSWITCH         = lib.mkForce no;
     };
   };
 
