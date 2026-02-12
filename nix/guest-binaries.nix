@@ -1,14 +1,25 @@
 # Gondolin guest binaries (sandboxd, sandboxfs, sandboxssh, sandboxingress).
 #
 # These are Zig programs compiled as statically-linked musl executables.
-# The Zig build system handles cross-compilation natively — we just set
-# -Dtarget to the appropriate triple.
+# Zig handles cross-compilation natively — it can produce Linux musl
+# binaries from any host (including macOS) without a separate toolchain.
+#
+# The `targetSystem` parameter controls the output architecture:
+#   "x86_64-linux"  → x86_64-linux-musl
+#   "aarch64-linux" → aarch64-linux-musl
+#
+# When called from a macOS host, the Zig compiler runs natively on macOS
+# and cross-compiles to the Linux target.  No Linux builder required.
 #
 # Usage:
-#   guestBinaries = import ./guest-binaries.nix { inherit pkgs; };
-#   # Binaries are at ${guestBinaries}/bin/{sandboxd,sandboxfs,sandboxssh,sandboxingress}
+#   guestBinaries = import ./guest-binaries.nix {
+#     inherit pkgs;
+#     targetSystem = "aarch64-linux";
+#   };
 
-{ pkgs }:
+{ pkgs
+, targetSystem ? pkgs.stdenv.hostPlatform.system
+}:
 
 let
   zigTargets = {
@@ -16,8 +27,8 @@ let
     "aarch64-linux" = "aarch64-linux-musl";
   };
 
-  zigTarget = zigTargets.${pkgs.stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
+  zigTarget = zigTargets.${targetSystem}
+    or (throw "Unsupported target system: ${targetSystem}");
 
 in pkgs.stdenv.mkDerivation {
   pname = "gondolin-guest-binaries";
@@ -61,6 +72,6 @@ in pkgs.stdenv.mkDerivation {
 
   meta = {
     description = "Gondolin guest VM binaries (sandboxd, sandboxfs, sandboxssh, sandboxingress)";
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }
